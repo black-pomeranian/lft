@@ -1,0 +1,115 @@
+<html>
+ <head>
+  <style type="text/css">
+   body, html {
+    margin:0;
+    padding:0;
+    background:white;
+    color:#000;
+    font-family: "Noto Sans Japanese", sans-serif;
+    margin: 1% 10% 1%;
+   }
+   .game_example img {
+    width: 25%;
+   }
+   .probe img {
+     width: 300px;
+   }
+   .startButton{
+     width: 150px;
+   }
+   #warning {
+     color:#FF0000;
+   }
+   #check_warning{
+     color:#FF0000;
+   }
+  </style>
+  <meta charset="UTF-8">
+  <script src="/node2/lft/socket.io/socket.io.js"></script>
+  <link rel="stylesheet" href="//fonts.googleapis.com/earlyaccess/notosansjapanese.css">
+  <title>Signup</title>
+ </head>
+
+ <body>
+   <br>
+   <h1>実験説明</h1>
+   <h2>1. はじめに</h2>
+   <p>ご参加ありがとうございます．</p>
+   <p>本日はゲームを用いた反応速度に関する実験に参加していただきます．</p>
+   <p>実験は，ゲームを行った後にアンケートに答えていただいて終了となります．</p>
+   <p>はじめに，ランサーズユーザIDを記入し，以下の説明を読んでから実験開始ボタンを押してください．</p>
+   <p>ランサーズユーザID <span id="userName"></span>
+   <input type="text" id="input_name" required="required" placeholder="例: afke36f8"/></p>
+   <h2>2. ゲーム説明</h2>
+   <ul>
+     <li>手前にある円が，ラインから外れないように操作してください．</li>
+     <li>これを「終了」と表示されるまで行ってください．</li>
+     <li>円がライン上にない場合はゲーム画面の縁が赤色になります．</li>
+   </ul>
+   <div class="game_example">
+     <img src="/node2/lft/images/safe1.png" alt="safe1" title="ゲーム画面_ライン上1">
+     <img src="/node2/lft/images/safe2.png" alt="safe2" title="ゲーム画面_ライン上2">
+     <img src="/node2/lft/images/error.png" alt="error" title="ゲーム画面_ライン外">
+  </div>
+   <h3>操作方法</h3>
+   <ul>
+     <li>円を左に移動：キーボードにて「j」を入力</li>
+     <li>円を右に移動：キーボードにて「l」を入力</li>
+   </ul>
+   <p>また，課題中に以下のようなポップアップが複数回表示されます．</p>
+   <p>これに対して回答が「はい」の場合はキーボードの「a」を，「何も考えていなかった」の場合は「s」を，「別のことを考えていた」の場合は「d」を入力してください．</p>
+   <p>これらはできるだけ早く，正直に回答してください．</p>
+   <p>回答内容が報酬に影響を与えることはございません．</p>
+   <div class="probe">
+     <img src="/node2/lft/images/probe.png" alt="probe" title="probe">
+  </div>
+   <h2>3. 注意事項</h2>
+   <ul>
+     <li>スマートフォンやタブレットではゲームを行えません．PCからアクセスしてください．</li>
+     <li>Internet Explorer以外のブラウザからアクセスしてください．</li>
+     <li>実験ではブラウザのリロード，戻る，すすむ，閉じるの操作を絶対に行わないでください．</li>
+     <li>このゲームでは，音声が流れる場合があります．PCの音量が，音を聞き取れるのに十分な大きさであることを確認し，静かな環境で実施してください．</li>
+     <li>実験用のwebサイト（今表示されている説明用ページと次に移動するゲーム用ページ）には複数回アクセスしないでください．</li>
+     <li>もし以上の注意点を行ってしまった場合やトラブルがあった場合は，ゲーム終了後のアンケートにてご報告ください．</li>
+   </ul>
+   <br>
+   <p><span id="warning"></span></p>
+   <p><span id="check_warning"></span></p>
+   <p>実験について理解しましたか？<input type="checkbox" id="check" /></p>
+   <input type="button" value="確認クイズへ" onclick="taskStartBtn()"  class="startButton"/>
+
+  <script>
+  var socket = io.connect("http://133.70.173.112/",{path: '/node2/lft/socket.io',reconnectionDelay: 5000,reconnection: true,transports: ['websocket']});
+
+   function taskStartBtn() {
+     let id = document.getElementById("input_name").value;
+     sessionStorage.setItem('name', id)
+     let name = {name: id};
+     let warning = document.getElementById("warning");
+     let check = document.getElementById("check");
+     let nameChecked = false;
+     let ruleChecked = false;
+
+     //console.log(name);
+     if(id==""){
+       warning.textContent = "ユーザIDを入力してください";
+     }else{
+       warning.textContent = "";
+       nameChecked = true;
+     }
+     if (!check.checked) {
+       check_warning.textContent = "実験説明を読み，チェックボックスをチェックしてください";
+     }else{
+       check_warning.textContent = "";
+       ruleChecked = true;
+     }
+     if(nameChecked&&ruleChecked){
+       socket.emit('setting', name);
+       location.href = "http://133.70.173.112/node2/lft/explanation_check.html"
+     }
+   }
+
+  </script>
+ </body>
+</html>
