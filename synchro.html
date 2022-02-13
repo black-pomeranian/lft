@@ -189,8 +189,8 @@
      console.log('status');
      socket.emit('status', true);
      socket.on('change',function(data){
-       console.log('status');
-       console.log(data);
+       //console.log('status');
+       //console.log(data);
        status = data;
        });
     }
@@ -293,15 +293,17 @@
     canvas.beginPath();
     var canvas_color = canvas.createLinearGradient(w/2, 0, w/2, h);
     canvas_color.addColorStop(0.0, color);
-
-    if(status){
+    console.log(color);
+    console.log(status);
+    if(status==true){
       audio.playbackRate = 0.8;
       color = 'rgb(100, 100, 255)';
+      console.log('blue');
     }else{
       audio.playbackRate = 1.2;
       color = 'rgb(255, 100, 100)';
+      console.log('red');
     }
-
 
     canvas.fillStyle = canvas_color;
     //canvas.fillStyle = "red"
