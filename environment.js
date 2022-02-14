@@ -381,15 +381,12 @@ io.on('connection', function(socket){
       if(baseline_ave+baseline_sd < sdnn){
         status_count += 1;
       }else{
-        status_count += 1;
+        status_count = 0;
         //status_count = 0;
       }
 
       if(9<status_count){
-        status = true;
         socket.emit('change', true)
-      } else {
-        socket.emit('change', false)
       }
     }
 	});
