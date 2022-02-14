@@ -41,7 +41,9 @@ async function getBaseline() {
   for(let i=0; i<length; i++){
     //console.log(res[i]['rri1']);
     if(rriFilter(res[i]['rri1'],res[i]['rri2'],res[i]['rri3'])){
-      baseline.push(standardDeviation([res[i]['rri1'],res[i]['rri2'],res[i]['rri3']]));
+      baseline.push(res[i]['rri1']);
+      baseline.push(res[i]['rri2']);
+      baseline.push(res[i]['rri3']);
     }
   }
 
@@ -51,12 +53,12 @@ async function getBaseline() {
   baseline_ave = sum / baseline.length;
 
   baseline_sd = standardDeviation(baseline);
-/*
+
   console.log('*************************************');
   console.log(baseline);
   console.log(baseline_ave);
   console.log(baseline_sd);
-  */
+
 }
 
 async function getRRI() {
@@ -352,12 +354,28 @@ io.on('connection', function(socket){
   socket.on('status',async function(data){
     if(data){
 
-      const res = (await sql('SELECT * FROM demo ORDER BY count DESC LIMIT 20;', [], false));
-      //console.log(res);
-      const rri = [res[0]['rri1'], res[0]['rri2'], res[0]['rri3']];
-      if(rriFilter(res[0]['rri1'],res[0]['rri2'],res[0]['rri3'])){
-        sdnn = standardDeviation(rri);
+      const res = (await sql('SELECT * FROM demo ORDER BY count DESC LIMIT 20;', [], true));
+      const length = Object.keys(res).length;
+      console.log(length);
+      var rri = new Array();
+      for(let i=0; i<length; i++){
+        //console.log(res[i]['rri1']);
+        if(rriFilter(res[i]['rri1'],res[i]['rri2'],res[i]['rri3'])){
+          rri.push(res[i]['rri1']);
+          rri.push(res[i]['rri2']);
+          rri.push(res[i]['rri3']);
+          console.log('ooooooooook');
+        }else{
+          console.log('noooooooooo');
+        }
       }
+/*
+      console.log('*************************************');
+      console.log(rri);
+      console.log(res[0]['rri2']);
+*/
+      sdnn = standardDeviation(rri);
+      console.log(sdnn);
 
       //sdnnが大きいとマインドワンダリング
       if(baseline_ave+baseline_sd < sdnn){
@@ -366,11 +384,10 @@ io.on('connection', function(socket){
         status_count += 1;
         //status_count = 0;
       }
-      console.log('****count*****');
-      console.log(status_count);
+
       if(9<status_count){
         status = true;
-        socket.emit('change', status)
+        socket.emit('change', true)
       } else {
         socket.emit('change', false)
       }

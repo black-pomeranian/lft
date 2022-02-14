@@ -293,13 +293,12 @@
     canvas.beginPath();
     var canvas_color = canvas.createLinearGradient(w/2, 0, w/2, h);
     canvas_color.addColorStop(0.0, color);
-    console.log(color);
-    console.log(status);
-    if(status==true){
+    console.log(typeof status);
+    if(status=='true'){
       audio.playbackRate = 0.8;
       color = 'rgb(100, 100, 255)';
       console.log('blue');
-    }else{
+    }else if(status=='false'){
       audio.playbackRate = 1.2;
       color = 'rgb(255, 100, 100)';
       console.log('red');
