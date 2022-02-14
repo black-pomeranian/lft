@@ -62,7 +62,7 @@ async function getBaseline() {
 }
 
 async function getRRI() {
-  const res = (await sql('SELECT * FROM demo ORDER BY count DESC LIMIT 1;', [], false));
+  const res = (await sql('SELECT * FROM exp1 ORDER BY count DESC LIMIT 1;', [], false));
   const rri = [res[0]['rri1'], res[0]['rri2'], res[0]['rri3']];
   if(rriFilter(res[0]['rri1'],res[0]['rri2'],res[0]['rri3'])){
     sdnn = standardDeviation(rri);
@@ -354,41 +354,43 @@ io.on('connection', function(socket){
   socket.on('status',async function(data){
     if(data){
 
-      const res = (await sql('SELECT * FROM demo ORDER BY count DESC LIMIT 20;', [], true));
+      const res = (await sql('SELECT * FROM exp1 ORDER BY count DESC LIMIT 20;', [], true));
       const length = Object.keys(res).length;
       console.log(length);
-      var rri = new Array();
-      for(let i=0; i<length; i++){
-        //console.log(res[i]['rri1']);
-        if(rriFilter(res[i]['rri1'],res[i]['rri2'],res[i]['rri3'])){
-          rri.push(res[i]['rri1']);
-          rri.push(res[i]['rri2']);
-          rri.push(res[i]['rri3']);
-          console.log('ooooooooook');
+      if(length == 20){
+        var rri = new Array();
+        for(let i=0; i<length; i++){
+          //console.log(res[i]['rri1']);
+          if(rriFilter(res[i]['rri1'],res[i]['rri2'],res[i]['rri3'])){
+            rri.push(res[i]['rri1']);
+            rri.push(res[i]['rri2']);
+            rri.push(res[i]['rri3']);
+            console.log('ooooooooook');
+          }else{
+            console.log('noooooooooo');
+          }
+        }
+  /*
+        console.log('*************************************');
+        console.log(rri);
+        console.log(res[0]['rri2']);
+  */
+        sdnn = standardDeviation(rri);
+        console.log(sdnn);
+
+        //sdnnが大きいとマインドワンダリング
+        if(baseline_ave+baseline_sd < sdnn){
+          status_count += 1;
         }else{
-          console.log('noooooooooo');
+          status_count = 0;
+          //status_count = 0;
+        }
+
+        if(9<status_count){
+          socket.emit('change', true)
         }
       }
-/*
-      console.log('*************************************');
-      console.log(rri);
-      console.log(res[0]['rri2']);
-*/
-      sdnn = standardDeviation(rri);
-      console.log(sdnn);
-
-      //sdnnが大きいとマインドワンダリング
-      if(baseline_ave+baseline_sd < sdnn){
-        status_count += 1;
-      }else{
-        status_count = 0;
-        //status_count = 0;
-      }
-
-      if(9<status_count){
-        socket.emit('change', true)
-      }
-    }
+    }  
 	});
 });
 
