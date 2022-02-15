@@ -115,7 +115,8 @@
   var probe_timer = 50;
   var probe_counter = 0;
   var status = false;
-  var color = 'rgb(100, 100, 255)';
+  var color1 = 'rgb(100, 100, 255)';
+  var color2 = 'rgb(200, 200, 255)';
 
   const audio = document.getElementById("bgm");
 
@@ -292,15 +293,18 @@
     canvas.clearRect(0, 0, w, h);
     canvas.beginPath();
     var canvas_color = canvas.createLinearGradient(w/2, 0, w/2, h);
-    canvas_color.addColorStop(0.0, color);
+    canvas_color.addColorStop(0.0, color1);
+    canvas_color.addColorStop(0.0, color2);
     console.log(status);
     if(status=='true'){
       audio.playbackRate = 1.2;
-      color = 'rgb(255, 100, 100)';
+      color1 = 'rgb(255, 100, 100)';
+      color2 = 'rgb(255, 200, 200)';
       console.log('red');
     }else if(status=='false'){
       audio.playbackRate = 0.8;
-      color = 'rgb(100, 100, 255)';
+      color1 = 'rgb(100, 100, 255)';
+      color2 = 'rgb(200, 200, 255)';
       console.log('blue');
     }
 
