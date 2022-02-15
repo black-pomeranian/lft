@@ -14,6 +14,7 @@ var sdnn = 0;
 var status = false;
 var status_count = 0;
 var start = false;
+var changed = false;
 
 const mysql = require('mysql');
 const pool = mysql.createPool(conf.MYSQL);
@@ -353,7 +354,6 @@ io.on('connection', function(socket){
 
   socket.on('status',async function(data){
     if(data){
-
       const res = (await sql('SELECT * FROM exp1 ORDER BY count DESC LIMIT 20;', [], true));
       const length = Object.keys(res).length;
       console.log(length);
@@ -365,32 +365,36 @@ io.on('connection', function(socket){
             rri.push(res[i]['rri1']);
             rri.push(res[i]['rri2']);
             rri.push(res[i]['rri3']);
-            console.log('ooooooooook');
+            //console.log('ooooooooook');
           }else{
-            console.log('noooooooooo');
+            //console.log('noooooooooo');
           }
         }
-  /*
-        console.log('*************************************');
-        console.log(rri);
-        console.log(res[0]['rri2']);
-  */
+
         sdnn = standardDeviation(rri);
         console.log(sdnn);
-
-        //sdnnが大きいとマインドワンダリング
-        if(baseline_ave+baseline_sd < sdnn){
-          status_count += 1;
-        }else{
-          status_count = 0;
-          //status_count = 0;
+        console.log(typeof changed);
+        if(!changed){
+          //test用
+          //status_count += 1;
+          //sdnnが大きいとマインドワンダリング
+          if(baseline_ave+baseline_sd < sdnn){
+            status_count = 0;
+            console.log('MW');
+          }else{
+            status_count += 1;
+            console.log('Normal');
+            //status_count = 0;
+          }
         }
-
+        console.log(changed);
+        console.log(status_count);
         if(9<status_count){
           socket.emit('change', true)
+          changed = true;
         }
       }
-    }  
+    }
 	});
 });
 

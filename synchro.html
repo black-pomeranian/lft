@@ -207,7 +207,7 @@
        socket.emit('probe', probeLog);
      }
      let redirect = setInterval(function(){
-        location.href = "https://docs.google.com/forms/d/e/1FAIpQLSfOs55JnnwSMKPaq0OSIS_81KrbvAcrn_1LaehaLfWvT0-3dA/viewform?usp=sf_link";
+        location.href = "https://docs.google.com/forms/d/e/1FAIpQLSeUj5Gnbyoe6StIwbPS1u07zF2I244biqjIJ9Lun19ymJqkUw/viewform?usp=sf_link";
       },2000);
    }
 
@@ -293,7 +293,7 @@
     canvas.beginPath();
     var canvas_color = canvas.createLinearGradient(w/2, 0, w/2, h);
     canvas_color.addColorStop(0.0, color);
-    console.log(typeof status);
+    console.log(status);
     if(status=='true'){
       audio.playbackRate = 0.8;
       color = 'rgb(100, 100, 255)';
