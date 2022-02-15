@@ -48,15 +48,19 @@ async function getBaseline() {
     }
   }
 
-  const sum = baseline.reduce((a, b) => {
+  var baseline_sdnn = new Array();
+  for(let i=0; i<baseline.length-60; i=i+3){
+    baseline_sdnn.push(standardDeviation(baseline.slice(i, i+60)));
+  }
+  const sum = baseline_sdnn.reduce((a, b) => {
    return a + b;
   });
-  baseline_ave = sum / baseline.length;
+  baseline_ave = sum / baseline_sdnn.length;
 
-  baseline_sd = standardDeviation(baseline);
+  baseline_sd = standardDeviation(baseline_sdnn);
 
   console.log('*************************************');
-  console.log(baseline);
+  console.log(baseline_sdnn);
   console.log(baseline_ave);
   console.log(baseline_sd);
 
@@ -372,19 +376,18 @@ io.on('connection', function(socket){
         }
 
         sdnn = standardDeviation(rri);
+        console.log(baseline_ave+baseline_sd);
         console.log(sdnn);
-        console.log(typeof changed);
         if(!changed){
           //test用
           //status_count += 1;
           //sdnnが大きいとマインドワンダリング
           if(baseline_ave+baseline_sd < sdnn){
-            status_count = 0;
+            status_count += 1;
             console.log('MW');
           }else{
-            status_count += 1;
+            status_count = 0;
             console.log('Normal');
-            //status_count = 0;
           }
         }
         console.log(changed);
@@ -398,14 +401,6 @@ io.on('connection', function(socket){
 	});
 });
 
-/*
-let rriInterval = setInterval(function(){
-  if(start){
-    console.log('getRRI');
-    getRRI();
-  }
-},1000);
-*/
 
 function rriFilter(rri1, rri2, rri3){
   var max = 1500;
