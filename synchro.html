@@ -115,6 +115,7 @@
   var probe_timer = 50;
   var probe_counter = 0;
   var status = false;
+  var stimuli =0;
   var color1 = 'rgb(255, 100, 100)';
   var color2 = 'rgb(255, 200, 200)';
 
@@ -204,7 +205,7 @@
        probeCheck = false;
        probeEndTime = null;
        answer = null;
-       let probeLog = {path: probePath, answer: answer, start: probeStartTime, end: probeEndTime};
+       let probeLog = {path: probePath, answer: answer, start: probeStartTime, end: probeEndTime, Stimuli: stimuli};
        socket.emit('probe', probeLog);
      }
      let redirect = setInterval(function(){
@@ -301,6 +302,7 @@
       audio.playbackRate = 0.8;
       color1 = 'rgb(100, 100, 255)';
       color2 = 'rgb(200, 200, 255)';
+      stimuli = 1;
       console.log('blue');
     }else if(status=='false'){
       audio.playbackRate = 1.2;
@@ -318,7 +320,7 @@
     detect_online();
     let time = getNowTime();
     //let vehicleLog = {fileName: fileName, Time: time, OnLine: onLine, Vpos: vposx, Gpos: Gpos};
-    let vehicleLog = {path: vehiclePath,Time: time, OnLine: onLine, Vpos: vposx, Gpos: Gpos, InputKey: direction};
+    let vehicleLog = {path: vehiclePath,Time: time, OnLine: onLine, Vpos: vposx, Gpos: Gpos, InputKey: direction, Stimuli: stimuli};
     //console.log(vehicleLog);
     socket.emit('vehicle', vehicleLog);
    }

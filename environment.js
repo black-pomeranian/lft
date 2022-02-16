@@ -347,12 +347,12 @@ io.on('connection', function(socket){
 	});
 
   socket.on('vehicle',function(data){
-    var vehicleLog = data["Time"] + "," + data["OnLine"] + "," + data["Vpos"] + "," + data["Gpos"] + "," + data["InputKey"] + "," + data["Start"] + "	\n";
+    var vehicleLog = data["Time"] + "," + data["OnLine"] + "," + data["Vpos"] + "," + data["Gpos"] + "," + data["InputKey"] + "," + data["Stimuli"] + "	\n";
     appendFile("."+data["path"], vehicleLog);
 	});
 
   socket.on('probe',function(data){
-    var probeLog = data["answer"] + "," + data["start"] + "," + data["end"] + "	\n";
+    var probeLog = data["answer"] + "," + data["start"] + "," + data["end"] + "," + data["Stimuli"] + "	\n";
     appendFile("."+data["path"], probeLog);
 	});
 
