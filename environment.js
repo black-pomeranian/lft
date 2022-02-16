@@ -254,8 +254,8 @@ function countFile(path){
 
 
 var name = null;
-var vehicleRow = "Time,OnLine,Vpos,Gpos,InputKey,Start\n";
-var probeRow = "answer,start,end\n";
+var vehicleRow = "Time,OnLine,Vpos,Gpos,InputKey,Stimuli\n";
+var probeRow = "answer,start,end,Stimuli\n";
 var vehiclePath = "";
 var probePath = "";
 

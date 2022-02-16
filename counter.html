@@ -116,8 +116,8 @@
   var probe_counter = 0;
   var status = false;
   var stimuli = 0;
-  var color1 = 'rgb(100, 100, 255)';
-  var color2 = 'rgb(200, 200, 255)';
+  var color1 = 'rgb(255, 255, 255)';
+  var color2 = 'rgb(255, 255, 255)';
 
   const audio = document.getElementById("bgm");
 
@@ -239,7 +239,7 @@
     modal.classList.add('hidden');
     probeCheck = false;
     probeEndTime = getNowTime();
-    let probeLog = {path: probePath, answer: answer, start: probeStartTime, end: probeEndTime};
+    let probeLog = {path: probePath, answer: answer, start: probeStartTime, end: probeEndTime, Stimuli: stimuli};
     //console.log(probeLog);
     socket.emit('probe', probeLog);
    }
@@ -305,8 +305,8 @@
       console.log('red');
     }else if(status=='false'){
       audio.playbackRate = 0.8;
-      color1 = 'rgb(100, 100, 255)';
-      color2 = 'rgb(200, 200, 255)';
+      color1 = 'rgb(255, 255, 255)';
+      color2 = 'rgb(255, 255, 255)';
       console.log('blue');
     }
 

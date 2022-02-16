@@ -239,7 +239,7 @@
     modal.classList.add('hidden');
     probeCheck = false;
     probeEndTime = getNowTime();
-    let probeLog = {path: probePath, answer: answer, start: probeStartTime, end: probeEndTime};
+    let probeLog = {path: probePath, answer: answer, start: probeStartTime, end: probeEndTime, Stimuli: stimuli};
     //console.log(probeLog);
     socket.emit('probe', probeLog);
    }
