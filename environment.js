@@ -177,7 +177,9 @@ app.get('/node2/lft/expwindow_lh.html', function(req,res) {
 app.get('/node2/lft/synchro.html', function(req,res) {
   res.sendFile(__dirname + '/synchro.html');
 });
-
+app.get('/node2/lft/counter.html', function(req,res) {
+  res.sendFile(__dirname + '/counter.html');
+});
 app.get('/node2/lft/course-4.csv', function(req,res) {
   res.sendFile(__dirname + '/course-4.csv');
 });
