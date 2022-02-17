@@ -15,6 +15,10 @@ var status = false;
 var status_count = 0;
 var start = false;
 var changed = false;
+var rri1 = 0;
+var rri2 = 0;
+var rri3 = 0;
+var count = 0;
 
 const mysql = require('mysql');
 const pool = mysql.createPool(conf.MYSQL);
@@ -256,7 +260,7 @@ function countFile(path){
 
 
 var name = null;
-var vehicleRow = "Time,OnLine,Vpos,Gpos,InputKey,Stimuli\n";
+var vehicleRow = "Time,OnLine,Vpos,Gpos,InputKey,Stimuli,rri1,rri2,rri3,count,sdnn\n";
 var probeRow = "answer,start,end,Stimuli\n";
 var vehiclePath = "";
 var probePath = "";
@@ -349,7 +353,7 @@ io.on('connection', function(socket){
 	});
 
   socket.on('vehicle',function(data){
-    var vehicleLog = data["Time"] + "," + data["OnLine"] + "," + data["Vpos"] + "," + data["Gpos"] + "," + data["InputKey"] + "," + data["Stimuli"] + "	\n";
+    var vehicleLog = data["Time"] + "," + data["OnLine"] + "," + data["Vpos"] + "," + data["Gpos"] + "," + data["InputKey"] + "," + data["Stimuli"] + "," + rri1 + "," + rri2 + "," + rri3 + "," + count + "," + sdnn + "	\n";
     appendFile("."+data["path"], vehicleLog);
 	});
 
@@ -363,6 +367,10 @@ io.on('connection', function(socket){
       const res = (await sql('SELECT * FROM exp1 ORDER BY count DESC LIMIT 20;', [], true));
       const length = Object.keys(res).length;
       console.log(length);
+      rri1 = res[0]['rri1'];
+      rri2 = res[0]['rri2'];
+      rri3 = res[0]['rri3'];
+      count = res[0]['count'];
       if(length == 20){
         var rri = new Array();
         for(let i=0; i<length; i++){
