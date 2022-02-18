@@ -392,7 +392,7 @@ io.on('connection', function(socket){
           //test用
           //status_count += 1;
           //sdnnが大きいとマインドワンダリング
-          if(baseline_ave+baseline_sd < sdnn){
+          if(baseline_ave+baseline_sd*3 < sdnn){
             status_count += 1;
             console.log('MW');
           }else{
