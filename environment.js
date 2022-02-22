@@ -38,7 +38,7 @@ async function sql(sqlStatement, placeholder, isLog = true) {
 }
 
 async function getBaseline() {
-  const res = (await sql('SELECT * FROM baseline', [], false));
+  const res = (await sql('SELECT * FROM baseline ORDER BY count DESC LIMIT 60;', [], false));
   const length = Object.keys(res).length;
   console.log(length);
 
@@ -392,7 +392,7 @@ io.on('connection', function(socket){
           //test用
           //status_count += 1;
           //sdnnが大きいとマインドワンダリング
-          if(baseline_ave+baseline_sd*4.5 < sdnn){
+          if(baseline_ave+baseline_sd*3 < sdnn){
             status_count += 1;
             console.log('MW');
           }else{
