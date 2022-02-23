@@ -158,8 +158,8 @@
      let nowMs = nowTime.getMilliseconds();
      fileNameTime = String(nowYear) + String(nowMonth) + String(nowDate) + String(nowHour) + String(nowMin) + String(nowSec) + String(nowMs);
 
-     vehiclePath = "/Log/VehicleLog_counter/"+fileNameID+"_"+fileNameTime+"_Veihicle.csv";
-     probePath = "/Log/ProbeLog_counter/"+fileNameID+"_"+fileNameTime+"_Probe.csv"
+     vehiclePath = "/Log/VehicleLog_counter2/"+fileNameID+"_"+fileNameTime+"_Veihicle.csv";
+     probePath = "/Log/ProbeLog_counter2/"+fileNameID+"_"+fileNameTime+"_Probe.csv"
      let fileNameSocket = {vehiclePath: vehiclePath, probePath: probePath};
      console.log(fileNameSocket);
      socket.emit('fileName', fileNameSocket);

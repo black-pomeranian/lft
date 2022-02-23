@@ -38,7 +38,7 @@ async function sql(sqlStatement, placeholder, isLog = true) {
 }
 
 async function getBaseline() {
-  const res = (await sql('SELECT * FROM baseline ORDER BY count DESC LIMIT 60;', [], false));
+  const res = (await sql('SELECT * FROM baseline_bb ORDER BY count DESC LIMIT 60;', [], false));
   const length = Object.keys(res).length;
   console.log(length);
 
@@ -189,6 +189,15 @@ app.get('/node2/lft/synchro2.html', function(req,res) {
 });
 app.get('/node2/lft/counter2.html', function(req,res) {
   res.sendFile(__dirname + '/counter2.html');
+});
+app.get('/node2/lft/counter2.html', function(req,res) {
+  res.sendFile(__dirname + '/counter2.html');
+});
+app.get('/node2/lft/synchro2.html', function(req,res) {
+  res.sendFile(__dirname + '/synchro2.html');
+});
+app.get('/node2/lft/a.html', function(req,res) {
+  res.sendFile(__dirname + '/a.html');
 });
 app.get('/node2/lft/course-4.csv', function(req,res) {
   res.sendFile(__dirname + '/course-4.csv');
@@ -370,7 +379,7 @@ io.on('connection', function(socket){
 
   socket.on('status',async function(data){
     if(data){
-      const res = (await sql('SELECT * FROM exp1 ORDER BY count DESC LIMIT 20;', [], true));
+      const res = (await sql('SELECT * FROM exp_b ORDER BY count DESC LIMIT 20;', [], true));
       const length = Object.keys(res).length;
       console.log(length);
       rri1 = res[0]['rri1'];
