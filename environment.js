@@ -184,6 +184,12 @@ app.get('/node2/lft/synchro.html', function(req,res) {
 app.get('/node2/lft/counter.html', function(req,res) {
   res.sendFile(__dirname + '/counter.html');
 });
+app.get('/node2/lft/synchro2.html', function(req,res) {
+  res.sendFile(__dirname + '/synchro2.html');
+});
+app.get('/node2/lft/counter2.html', function(req,res) {
+  res.sendFile(__dirname + '/counter2.html');
+});
 app.get('/node2/lft/course-4.csv', function(req,res) {
   res.sendFile(__dirname + '/course-4.csv');
 });
@@ -392,7 +398,7 @@ io.on('connection', function(socket){
           //test用
           //status_count += 1;
           //sdnnが大きいとマインドワンダリング
-          if(baseline_ave+baseline_sd*3 < sdnn){
+          if(baseline_ave+baseline_sd*1 < sdnn){
             status_count += 1;
             console.log('MW');
           }else{
