@@ -20,7 +20,7 @@ var rri2 = 0;
 var rri3 = 0;
 var count = 0;
 var baseline_database = 'baseline_test';
-var exp_database = 'exp_test2'
+var exp_database = 'exp_test3'
 
 const mysql = require('mysql');
 const pool = mysql.createPool(conf.MYSQL);
