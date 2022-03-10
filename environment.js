@@ -19,6 +19,8 @@ var rri1 = 0;
 var rri2 = 0;
 var rri3 = 0;
 var count = 0;
+var baseline_database = 'baseline_test';
+var exp_database = 'exp_test2'
 
 const mysql = require('mysql');
 const pool = mysql.createPool(conf.MYSQL);
@@ -38,7 +40,8 @@ async function sql(sqlStatement, placeholder, isLog = true) {
 }
 
 async function getBaseline() {
-  const res = (await sql('SELECT * FROM baseline_bb ORDER BY count DESC LIMIT 60;', [], false));
+  const query = 'SELECT * FROM ' + baseline_database + ';';
+  const res = (await sql(query, [], false));
   const length = Object.keys(res).length;
   console.log(length);
 
@@ -71,6 +74,7 @@ async function getBaseline() {
 }
 
 async function getRRI() {
+
   const res = (await sql('SELECT * FROM exp1 ORDER BY count DESC LIMIT 1;', [], false));
   const rri = [res[0]['rri1'], res[0]['rri2'], res[0]['rri3']];
   if(rriFilter(res[0]['rri1'],res[0]['rri2'],res[0]['rri3'])){
@@ -379,7 +383,8 @@ io.on('connection', function(socket){
 
   socket.on('status',async function(data){
     if(data){
-      const res = (await sql('SELECT * FROM exp_b ORDER BY count DESC LIMIT 20;', [], true));
+      const query = 'SELECT * FROM ' + exp_database + ' ORDER BY count DESC LIMIT 20;';
+      const res = (await sql(query, [], false));
       const length = Object.keys(res).length;
       console.log(length);
       rri1 = res[0]['rri1'];
@@ -407,7 +412,7 @@ io.on('connection', function(socket){
           //test用
           //status_count += 1;
           //sdnnが大きいとマインドワンダリング
-          if(baseline_ave+baseline_sd*1 < sdnn){
+          if(baseline_ave+baseline_sd*3 < sdnn){
             status_count += 1;
             console.log('MW');
           }else{
