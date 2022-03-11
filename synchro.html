@@ -97,6 +97,8 @@
    var ps = 60000;
    //タスクの時間(分)
    var tt = 30;
+   //経過時間(分)
+   var elapsed_minutes = 0;
    //コースの種類
    var input_course = "straight09_60.csv";
    getCSV(input_course,course);
@@ -114,7 +116,8 @@
 
   var probe_timer = 50;
   var probe_counter = 0;
-  var status = false;
+  var status1 = false;
+  var status2 = false;
   var stimuli =0;
   var color1 = 'rgb(255, 100, 100)';
   var color2 = 'rgb(255, 200, 200)';
@@ -193,7 +196,8 @@
      socket.on('change',function(data){
        //console.log('status');
        //console.log(data);
-       status = data;
+       status1 = data[0];
+       status2 = data[1];
        });
     }
 
@@ -298,7 +302,7 @@
     canvas_color.addColorStop(1.0, color2);
 
     console.log(status);
-    if(status=='true'){
+    if(status1=='true' && status2=='true' && elapsed_minutes>1){
       audio.playbackRate = 0.8;
       color1 = 'rgb(100, 100, 255)';
       color2 = 'rgb(200, 200, 255)';
