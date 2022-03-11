@@ -11,6 +11,7 @@ var threshold = 0;
 var baseline_ave = 0;
 var baseline_sd = 0;
 var sdnn = 0;
+var sdnn_list = new Array();
 var status = false;
 var status_count = 0;
 var start = false;
@@ -383,15 +384,34 @@ io.on('connection', function(socket){
 
   socket.on('status',async function(data){
     if(data){
+      //全部読み込む
       const query = 'SELECT * FROM ' + exp_database + ' ORDER BY count DESC LIMIT 20;';
       const res = (await sql(query, [], false));
-      const length = Object.keys(res).length;
+      const length = Object.keys(res1).length;
       console.log(length);
       rri1 = res[0]['rri1'];
       rri2 = res[0]['rri2'];
       rri3 = res[0]['rri3'];
       count = res[0]['count'];
-      if(length == 20){
+
+      let sdnn_ave = 9999;
+      let sdnn_sd = 9999;
+      let recent_status = false;
+      if(sdnn_list.length){
+        sdnn_ave = average(sdnn_list);
+        sdnn_sd = standardDeviation(sdnn_list);
+      }
+
+      //最新3個のsdnn
+      let recentRRI = [rri1,rri2,rri3];
+      let recentSDNN = standardDeviation(recentRRI);
+      sdnn_list.push(recentSDNN);
+      if(recentSDNN > sdnn_ave+3*sdnn_sd){
+        recent_status = true;
+      }
+
+      if(length > 20){
+        //最新20行分取得
         var rri = new Array();
         for(let i=0; i<length; i++){
           //console.log(res[i]['rri1']);
@@ -405,6 +425,7 @@ io.on('connection', function(socket){
           }
         }
 
+        //60個ごとのsdnn
         sdnn = standardDeviation(rri);
         console.log(baseline_ave+baseline_sd);
         console.log(sdnn);
@@ -423,9 +444,11 @@ io.on('connection', function(socket){
         console.log(changed);
         console.log(status_count);
         if(9<status_count){
-          socket.emit('change', true)
           changed = true;
+        }else{
+          changed = false;
         }
+        socket.emit('change', [changed, recent_status])
       }
     }
 	});
@@ -461,6 +484,14 @@ function standardDeviation(dataset){
   const variance = deviationSum / (dataset.length - 1);
   const standardDiviation = Math.sqrt(variance);
   return standardDiviation;
+}
+
+function average(dataset){
+  const sum = dataset.reduce((a, b) => {
+   return a + b;
+  });
+  const average = sum / dataset.length;
+  return average;
 }
 
 http.listen("0.0.0.0",8080);
